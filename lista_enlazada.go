@@ -102,14 +102,14 @@ type iteradorListaEnlazada[T any] struct {
 	lista    *listaEnlazada[T]
 }
 
-func (iterador *iteradorListaEnlazada[T]) panicIteradorFinalizado() {
+func panicIteradorFinalizado[T any](iterador *iteradorListaEnlazada[T]) {
 	if iterador.actual == nil {
 		panic("El iterador termino de iterar")
 	}
 }
 
 func (iterador *iteradorListaEnlazada[T]) VerActual() T {
-	iterador.panicIteradorFinalizado()
+	panicIteradorFinalizado(iterador)
 	return iterador.actual.dato
 }
 
@@ -118,7 +118,7 @@ func (iterador *iteradorListaEnlazada[T]) HaySiguiente() bool {
 }
 
 func (iterador *iteradorListaEnlazada[T]) Siguiente() {
-	iterador.panicIteradorFinalizado()
+	panicIteradorFinalizado(iterador)
 	iterador.anterior = iterador.actual
 	iterador.actual = iterador.actual.siguiente
 }
@@ -142,7 +142,7 @@ func (iterador *iteradorListaEnlazada[T]) Insertar(valor T) {
 }
 
 func (iterador *iteradorListaEnlazada[T]) Borrar() T {
-	iterador.panicIteradorFinalizado()
+	panicIteradorFinalizado(iterador)
 	valor := iterador.actual.dato
 	if iterador.actual == iterador.lista.primero {
 		iterador.lista.primero = iterador.actual.siguiente
