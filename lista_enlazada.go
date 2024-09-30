@@ -35,8 +35,9 @@ func (lista *listaEnlazada[T]) InsertarUltimo(valor T) {
 	nuevoNodo := crearNuevoNodoLista(valor)
 	if lista.EstaVacia() {
 		lista.primero = nuevoNodo
+	} else {
+		lista.ultimo.siguiente = nuevoNodo
 	}
-	lista.ultimo.siguiente = nuevoNodo
 	lista.ultimo = nuevoNodo
 	lista.largo++
 }
