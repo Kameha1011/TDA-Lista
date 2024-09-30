@@ -102,14 +102,14 @@ type iteradorListaEnlazada[T any] struct {
 	lista    *listaEnlazada[T]
 }
 
-func panicIteradorFinalizado[T any](iterador *iteradorListaEnlazada[T]) {
+func (iterador *iteradorListaEnlazada[T]) panicIteradorFinalizado() {
 	if iterador.actual == nil {
 		panic("El iterador termino de iterar")
 	}
 }
 
 func (iterador *iteradorListaEnlazada[T]) VerActual() T {
-	panicIteradorFinalizado(iterador)
+	iterador.panicIteradorFinalizado()
 	return iterador.actual.dato
 }
 
@@ -118,7 +118,7 @@ func (iterador *iteradorListaEnlazada[T]) HaySiguiente() bool {
 }
 
 func (iterador *iteradorListaEnlazada[T]) Siguiente() {
-	panicIteradorFinalizado(iterador)
+	iterador.panicIteradorFinalizado()
 	iterador.anterior = iterador.actual
 	iterador.actual = iterador.actual.siguiente
 }
@@ -127,8 +127,7 @@ func (iterador *iteradorListaEnlazada[T]) Insertar(valor T) {
 	nuevoNodo := crearNuevoNodoLista(valor)
 	nuevoNodo.siguiente = iterador.actual
 
-	if iterador.anterior != nil {
-		iterador.anterior.siguiente = nuevoNodo
+	if iterador.actual == iterador.lista.primero {
 		iterador.lista.primero = nuevoNodo
 	}
 	if iterador.actual == nil {
@@ -136,15 +135,16 @@ func (iterador *iteradorListaEnlazada[T]) Insertar(valor T) {
 	}
 	// if iterador.actual == nil && iterador.lista.primero == iterador.actual {
 	// 	iterador.lista.primero = nuevoNodo
+	//  iterador.lista.ultimo = nuevoNodo
 	// }
 	iterador.actual = nuevoNodo
 	iterador.lista.largo++
 }
 
 func (iterador *iteradorListaEnlazada[T]) Borrar() T {
-	panicIteradorFinalizado(iterador)
+	iterador.panicIteradorFinalizado()
 	valor := iterador.actual.dato
-	if iterador.anterior == nil {
+	if iterador.actual == iterador.lista.primero {
 		iterador.lista.primero = iterador.actual.siguiente
 	} else {
 		iterador.anterior.siguiente = iterador.actual.siguiente
@@ -152,8 +152,7 @@ func (iterador *iteradorListaEnlazada[T]) Borrar() T {
 
 	if iterador.actual == iterador.lista.ultimo {
 		iterador.lista.ultimo = iterador.anterior
-		iterador.actual = iterador.anterior
-
+		//iterador.actual = iterador.anterior
 	} else {
 		iterador.actual = iterador.actual.siguiente
 	}
