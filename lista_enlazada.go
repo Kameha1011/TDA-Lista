@@ -127,17 +127,12 @@ func (iterador *iteradorListaEnlazada[T]) Siguiente() {
 func (iterador *iteradorListaEnlazada[T]) Insertar(valor T) {
 	nuevoNodo := crearNuevoNodoLista(valor)
 	nuevoNodo.siguiente = iterador.actual
-
-	if iterador.actual == iterador.lista.primero {
+	if iterador.anterior == nil {
 		iterador.lista.primero = nuevoNodo
+	} else {
+		iterador.anterior.siguiente = nuevoNodo
 	}
-	if iterador.actual == nil {
-		iterador.lista.ultimo = nuevoNodo
-	}
-	// if iterador.actual == nil && iterador.lista.primero == iterador.actual {
-	// 	iterador.lista.primero = nuevoNodo
-	//  iterador.lista.ultimo = nuevoNodo
-	// }
+	iterador.anterior.siguiente = nuevoNodo
 	iterador.actual = nuevoNodo
 	iterador.lista.largo++
 }
@@ -165,5 +160,6 @@ func crearIteradorListaEnlazada[T any](lista *listaEnlazada[T]) *iteradorListaEn
 	iterador := new(iteradorListaEnlazada[T])
 	iterador.actual = lista.primero
 	iterador.anterior = nil
+	iterador.lista = lista
 	return iterador
 }
