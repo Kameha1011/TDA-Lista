@@ -274,8 +274,16 @@ func TestIterarInternoVacia(t *testing.T) { // valentin
 }
 
 func TestIterarInternoVolumen(t *testing.T) { // omar
+	lista, ultimo := TDALista.CrearListaEnlazada[int](), 0
+	for i := 0; i <= 100000; i++ {
+		lista.InsertarUltimo(int(i))
+	}
+	lista.Iterar(func(v int) bool {
+		ultimo = v
+		return true
+	})
+	require.Equal(t, 100000, ultimo)
 }
-
 func TestIterarExterno(t *testing.T) { // valentin
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
