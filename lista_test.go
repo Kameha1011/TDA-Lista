@@ -10,6 +10,10 @@ import (
 func TestListaVacia(t *testing.T) { //omar
 	lista := TDALista.CrearListaEnlazada[int]()
 	require.True(t, lista.EstaVacia())
+	require.Panics(t, func() { lista.BorrarPrimero() })
+	require.Panics(t, func() { lista.VerPrimero() })
+	require.Panics(t, func() { lista.VerUltimo() })
+	require.Equal(t, 0, lista.Largo())
 }
 
 func TestInsertarPrimero(t *testing.T) { //valentin
@@ -41,18 +45,41 @@ func TestBorrarPrimero(t *testing.T) { //valentin
 }
 
 func TestVaciar(t *testing.T) { //omar
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero('h')
+	lista.InsertarPrimero('o')
+	lista.InsertarPrimero('l')
+	lista.InsertarPrimero('a')
+	lista.BorrarPrimero()
+	lista.BorrarPrimero()
+	lista.BorrarPrimero()
+	lista.BorrarPrimero()
+	require.True(t, lista.EstaVacia())
+	require.Panics(t, func() { lista.BorrarPrimero() })
+	require.Panics(t, func() { lista.VerPrimero() })
+	require.Panics(t, func() { lista.VerUltimo() })
+	require.Equal(t, 0, lista.Largo())
 }
 
 func TestVerPrimero(t *testing.T) { //valentin
 }
 
 func TestVerUltimo(t *testing.T) { //omar
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarUltimo(1)
+	lista.InsertarUltimo(2)
+	require.Equal(t, 2, lista.VerUltimo())
 }
 
 func TestLargo(t *testing.T) { //valentin
 }
 
 func TestVerUltimoPrimero(t *testing.T) { // omar
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	require.Equal(t, 1, lista.VerUltimo())
+	require.Equal(t, 1, lista.VerPrimero())
+	require.Equal(t, lista.VerUltimo(), lista.VerPrimero())
 }
 
 func TestVolumen(t *testing.T) { // valentin
@@ -65,6 +92,29 @@ func TestComportamiento(t *testing.T) { // valentin
 }
 
 func TestComportamientoFloats(t *testing.T) { // omar
+	lista := TDALista.CrearListaEnlazada[float64]()
+	// comportamiento nuevo
+	require.True(t, lista.EstaVacia())
+	require.Panics(t, func() { lista.BorrarPrimero() })
+	require.Panics(t, func() { lista.VerPrimero() })
+	require.Panics(t, func() { lista.VerUltimo() })
+	require.Equal(t, 0, lista.Largo())
+	//comportamiento lleno
+	lista.InsertarPrimero(1)
+	require.Equal(t, float64(1), lista.BorrarPrimero())
+	lista.InsertarUltimo(1)
+	require.Equal(t, 1, lista.Largo())
+	lista.InsertarUltimo(2)
+	require.Equal(t, float64(2), lista.VerUltimo())
+	require.Equal(t, float64(1), lista.VerPrimero())
+	// comportamiento vaciando
+	lista.BorrarPrimero()
+	lista.BorrarPrimero()
+	require.True(t, lista.EstaVacia())
+	require.Panics(t, func() { lista.BorrarPrimero() })
+	require.Panics(t, func() { lista.VerPrimero() })
+	require.Panics(t, func() { lista.VerUltimo() })
+	require.Equal(t, 0, lista.Largo())
 }
 
 func TestIterarInterno(t *testing.T) { // valentin
