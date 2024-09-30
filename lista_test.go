@@ -7,26 +7,26 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestListaVacia(t *testing.T) {
+func TestListaVacia(t *testing.T) { //omar
 	lista := TDALista.CrearListaEnlazada[int]()
 	require.True(t, lista.EstaVacia())
 }
 
-func TestInsertarPrimero(t *testing.T) {
+func TestInsertarPrimero(t *testing.T) { //valentin
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
 	require.False(t, lista.EstaVacia())
 	require.Equal(t, 1, lista.VerPrimero())
 }
 
-func TestInsertarUltimo(t *testing.T) {
+func TestInsertarUltimo(t *testing.T) { //omar
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
 	require.False(t, lista.EstaVacia())
 	require.Equal(t, 1, lista.VerPrimero())
 }
 
-func TestBorrarPrimero(t *testing.T) {
+func TestBorrarPrimero(t *testing.T) { //valentin
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
 	lista.InsertarPrimero(2)
@@ -40,99 +40,99 @@ func TestBorrarPrimero(t *testing.T) {
 	require.True(t, lista.EstaVacia())
 }
 
-func TestVaciar(t *testing.T) {
+func TestVaciar(t *testing.T) { //omar
 }
 
-func TestVerPrimero(t *testing.T) {
+func TestVerPrimero(t *testing.T) { //valentin
 }
 
-func TestVerUltimo(t *testing.T) {
+func TestVerUltimo(t *testing.T) { //omar
 }
 
-func TestLargo(t *testing.T) {
+func TestLargo(t *testing.T) { //valentin
 }
 
-func TestVerUltimoPrimero(t *testing.T) {
+func TestVerUltimoPrimero(t *testing.T) { // omar
 }
 
-func TestVolumen(t *testing.T) {
+func TestVolumen(t *testing.T) { // valentin
 }
 
-func TestVolumenFloats(t *testing.T) {
+func TestVolumenFloats(t *testing.T) { // omar
 }
 
-func TestComportamiento(t *testing.T) {
+func TestComportamiento(t *testing.T) { // valentin
 }
 
-func TestComportamientoFloats(t *testing.T) {
+func TestComportamientoFloats(t *testing.T) { // omar
 }
 
-func TestIterarInterno(t *testing.T) {
+func TestIterarInterno(t *testing.T) { // valentin
 }
 
-func TestIterarInternoCorte(t *testing.T) {
+func TestIterarInternoCorte(t *testing.T) { // omar
 }
 
-func TestIterarInternoVacia(t *testing.T) {
+func TestIterarInternoVacia(t *testing.T) { // valentin
 }
 
-func TestIterarInternoVolumen(t *testing.T) {
+func TestIterarInternoVolumen(t *testing.T) { // omar
 }
 
-func TestIterarExterno(t *testing.T) {
+func TestIterarExterno(t *testing.T) { // valentin
 }
 
-func TestIterarExternoCorte(t *testing.T) {
+func TestIterarExternoCorte(t *testing.T) { // omar
 }
 
-func TestIterarExternoVacia(t *testing.T) {
-
-}
-
-func TestIteradorExternoInsertarVacia(t *testing.T) {
+func TestIterarExternoVacia(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoInsertar(t *testing.T) {
+func TestIteradorExternoInsertarVacia(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoInsertarVolumen(t *testing.T) {
+func TestIteradorExternoInsertar(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoBorrar(t *testing.T) {
+func TestIteradorExternoInsertarVolumen(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoInsertarFinal(t *testing.T) {
+func TestIteradorExternoBorrar(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoInsertarInicio(t *testing.T) {
+func TestIteradorExternoInsertarFinal(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoInsertarMedio(t *testing.T) {
+func TestIteradorExternoInsertarInicio(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoBorrarInicio(t *testing.T) {
+func TestIteradorExternoInsertarMedio(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoBorrarMedio(t *testing.T) {
+func TestIteradorExternoBorrarInicio(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoBorrarFinal(t *testing.T) {
+func TestIteradorExternoBorrarMedio(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoBorrarVolumen(t *testing.T) {
+func TestIteradorExternoBorrarFinal(t *testing.T) { // valentin
 
 }
 
-func TestIteradorExternoVaciar(t *testing.T) {
+func TestIteradorExternoBorrarVolumen(t *testing.T) { // omar
+
+}
+
+func TestIteradorExternoVaciar(t *testing.T) { // valentin
 
 }
