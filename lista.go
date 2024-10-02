@@ -24,8 +24,8 @@ type Lista[T any] interface {
 	Largo() int
 
 	/*
-	  Iterar itera por todos los elementos de la lista. Recibe como parámetro una función que va a recibir el elemento actual de la iteración y devuelve un booleano el cual si es verdadero
-	  continúa la iteración y si es falso detiene la iteración.
+	  Iterar itera por todos los elementos de la lista. Recibe como parámetro una función que va a recibir el elemento actual de la iteración y
+	  devuelve un booleano el cual si es verdadero continúa la iteración y si es falso detiene la iteración.
 	*/
 	Iterar(visitar func(T) bool)
 
