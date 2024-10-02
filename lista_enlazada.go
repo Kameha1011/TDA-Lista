@@ -150,10 +150,9 @@ func (iterador *iteradorListaEnlazada[T]) Borrar() T {
 
 	if iterador.actual == iterador.lista.ultimo {
 		iterador.lista.ultimo = iterador.anterior
-		//iterador.actual = iterador.anterior
-	} else {
-		iterador.actual = iterador.actual.siguiente
 	}
+	iterador.actual = iterador.actual.siguiente
+	iterador.lista.largo--
 	return valor
 
 }
