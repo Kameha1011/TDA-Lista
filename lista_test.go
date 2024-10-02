@@ -375,14 +375,6 @@ func TestIteradorExternoInsertar(t *testing.T) { // valentin
 	require.Equal(t, 21, sum2)
 }
 
-func TestIteradorExternoInsertarVolumen(t *testing.T) { // omar
-
-}
-
-func TestIteradorExternoBorrar(t *testing.T) { // valentin
-
-}
-
 func TestIteradorExternoInsertarFinal(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
@@ -394,34 +386,50 @@ func TestIteradorExternoInsertarFinal(t *testing.T) {
 		sum += iter.VerActual()
 	}
 	require.Equal(t, 10, sum)
-	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
-		if iter2.HaySiguiente() == false {
-			iter2.Insertar(5)
-			break
+	largo := lista.Largo()
+	iter := lista.Iterador()
+	for i := 0; i <= largo; i++ {
+		if i == largo {
+			iter.Insertar(5)
 		}
+		iter.Siguiente()
 	}
-	require.Equal(t, 5, lista.VerUltimo())
-
 	sum2 := 0
-	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
-		sum2 += iter.VerActual()
+	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
+		sum2 += iter2.VerActual()
 	}
 	require.Equal(t, 15, sum2)
+	require.Equal(t, 5, lista.Largo())
+	require.Equal(t, 5, lista.VerUltimo())
+
 }
 
 func TestIteradorExternoInsertarInicio(t *testing.T) { // valentin
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarUltimo(1)
+	lista.InsertarUltimo(2)
+	lista.InsertarUltimo(3)
+	require.Equal(t, 1, lista.VerPrimero())
+	largo := lista.Largo()
+	iter := lista.Iterador()
+	for i := 0; i < largo; i++ {
+		if i == 0 {
+			iter.Insertar(4)
+		}
+		iter.Siguiente()
+	}
+	require.Equal(t, 4, lista.VerPrimero())
+
+}
+func TestIteradorExternoInsertarVolumen(t *testing.T) { // omar
 
 }
 
-func TestIteradorExternoInsertarMedio(t *testing.T) { // omar
+func TestIteradorExternoBorrar(t *testing.T) { // valentin
 
 }
 
 func TestIteradorExternoBorrarInicio(t *testing.T) { // valentin
-
-}
-
-func TestIteradorExternoBorrarMedio(t *testing.T) { // omar
 
 }
 

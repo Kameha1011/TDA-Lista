@@ -132,7 +132,9 @@ func (iterador *iteradorListaEnlazada[T]) Insertar(valor T) {
 	} else {
 		iterador.anterior.siguiente = nuevoNodo
 	}
-	iterador.anterior.siguiente = nuevoNodo
+	if iterador.actual == nil {
+		iterador.lista.ultimo = nuevoNodo
+	}
 	iterador.actual = nuevoNodo
 	iterador.lista.largo++
 }
