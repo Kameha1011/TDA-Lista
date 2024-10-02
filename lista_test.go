@@ -338,7 +338,13 @@ func TestIterarExternoVacia(t *testing.T) { // valentin
 	require.PanicsWithValue(t, "El iterador termino de iterar", func() { lista.Iterador().Borrar() })
 }
 
-func TestIteradorExternoInsertarVacia(t *testing.T) { // omar
+func TestIteradorExternoInsertarVacia(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+	iter := lista.Iterador()
+	iter.Insertar(1)
+	require.Equal(t, 1, lista.VerPrimero())
+	require.Equal(t, 1, lista.VerUltimo())
+	require.Equal(t, 1, lista.Largo())
 
 }
 
@@ -413,26 +419,174 @@ func TestIteradorExternoInsertarInicio(t *testing.T) { // valentin
 	require.Equal(t, 4, lista.VerPrimero())
 
 }
-func TestIteradorExternoInsertarVolumen(t *testing.T) { // omar
 
+func TestIteradorExternoInsertarVolumen(t *testing.T) { // omar
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	lista.InsertarPrimero(2)
+	lista.InsertarPrimero(3)
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		if iter.VerActual() == 3 {
+			for i := 0; i < 100000; i++ {
+				iter.Insertar(i)
+			}
+			break
+		}
+	}
+	require.Equal(t, 100003, lista.Largo())
+	require.Equal(t, 1, lista.VerUltimo())
+	require.Equal(t, 99999, lista.VerPrimero())
+
+	lista2 := TDALista.CrearListaEnlazada[int]()
+	lista2.InsertarPrimero(1)
+	lista2.InsertarPrimero(2)
+	lista2.InsertarPrimero(3)
+	iter2 := lista2.Iterador()
+	largo := lista2.Largo()
+	for i := 0; i <= largo; i++ {
+		if i == 3 {
+			for j := 0; j < 100000; j++ {
+				iter2.Insertar(j)
+			}
+		}
+		iter2.Siguiente()
+	}
+
+	require.Equal(t, 100003, lista2.Largo())
+	require.Equal(t, 0, lista2.VerUltimo())
+	require.Equal(t, 3, lista2.VerPrimero())
 }
 
 func TestIteradorExternoBorrar(t *testing.T) { // valentin
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	lista.InsertarPrimero(2)
+	lista.InsertarPrimero(3)
 
+	sum := 0
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		sum += iter.VerActual()
+	}
+	require.Equal(t, 6, sum)
+
+	guardar := 0
+	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
+		if iter2.VerActual() == 3 {
+			guardar = iter2.Borrar()
+			break
+		}
+	}
+	require.Equal(t, 3, guardar)
+
+	sum2 := 0
+	for iter3 := lista.Iterador(); iter3.HaySiguiente(); iter3.Siguiente() {
+		sum2 += iter3.VerActual()
+	}
+	require.Equal(t, 3, sum2)
+
+}
+
+func TestIteradorExternoBorrar1(t *testing.T) { // omar
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	iter := lista.Iterador()
+	iter.Borrar()
+	require.True(t, lista.EstaVacia())
+	iter.Insertar(1)
+	require.Equal(t, 1, lista.VerPrimero())
 }
 
 func TestIteradorExternoBorrarInicio(t *testing.T) { // valentin
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarUltimo(1)
+	lista.InsertarUltimo(2)
+	lista.InsertarUltimo(3)
+	require.Equal(t, 1, lista.VerPrimero())
 
-}
+	inicioOriginal := lista.VerPrimero()
 
-func TestIteradorExternoBorrarFinal(t *testing.T) { // valentin
+	iter := lista.Iterador()
 
-}
+	for i := 0; i < lista.Largo(); i++ {
+		if i == 0 {
+			iter.Borrar()
+		}
+		iter.Siguiente()
+	}
 
-func TestIteradorExternoBorrarVolumen(t *testing.T) { // omar
+	require.Equal(t, 1, inicioOriginal)
+
+	require.Equal(t, 2, lista.VerPrimero())
+
+	require.Equal(t, 2, lista.Largo())
+
+	sum := 0
+	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
+		sum += iter2.VerActual()
+	}
+	require.Equal(t, 5, sum)
 
 }
 
 func TestIteradorExternoVaciar(t *testing.T) { // valentin
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	lista.InsertarPrimero(2)
+	lista.InsertarPrimero(3)
+	lista.InsertarPrimero(4)
+
+	iter := lista.Iterador()
+	for iter.HaySiguiente() {
+		iter.Borrar()
+	}
+
+	require.True(t, lista.EstaVacia())
+	require.Equal(t, 0, lista.Largo())
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { lista.Iterador().VerActual() })
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { lista.Iterador().Siguiente() })
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { lista.Iterador().Borrar() })
+
+}
+
+func TestIteradorExternoBorrarFinal(t *testing.T) { //Borrar en el ultimo elemento, sin que finalize el iterador
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarUltimo(1)
+	lista.InsertarUltimo(2)
+	lista.InsertarUltimo(3)
+	require.Equal(t, 3, lista.VerUltimo())
+	borrado := 0
+
+	iter := lista.Iterador()
+	for iter.HaySiguiente() {
+		if iter.VerActual() == 3 {
+			borrado = iter.Borrar()
+		} else {
+			iter.Siguiente()
+		}
+	}
+
+	require.Equal(t, 3, borrado)
+	require.Equal(t, 2, lista.VerUltimo())
+	require.Equal(t, 2, lista.Largo())
+
+}
+
+func TestIteradorExternoBorrarVolumen(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(0)
+	iter := lista.Iterador()
+
+	for i := 0; i < 100000; i++ {
+		iter.Insertar(i)
+	}
+
+	for iter.HaySiguiente() {
+		iter.Borrar()
+	}
+
+	require.Equal(t, 0, lista.Largo())
+	require.True(t, lista.EstaVacia())
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { iter.VerActual() })
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { iter.Siguiente() })
 
 }
