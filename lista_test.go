@@ -102,7 +102,7 @@ func TestLargo(t *testing.T) {
 	require.Equal(t, 0, lista.Largo())
 }
 
-func TestVerUltimoPrimero(t *testing.T) { // omar
+func TestVerUltimoPrimero(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
 	require.Equal(t, 1, lista.VerUltimo())
@@ -110,7 +110,7 @@ func TestVerUltimoPrimero(t *testing.T) { // omar
 	require.Equal(t, lista.VerUltimo(), lista.VerPrimero())
 }
 
-func TestVolumen(t *testing.T) { // valentin
+func TestVolumen(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	for i := 0; i < 100000; i++ {
 		lista.InsertarPrimero(i)
@@ -284,6 +284,7 @@ func TestIterarInternoVolumen(t *testing.T) {
 	})
 	require.Equal(t, 100000, ultimo)
 }
+
 func TestIterarExterno(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
@@ -363,24 +364,19 @@ func TestIteradorExternoInsertar(t *testing.T) {
 	lista.InsertarPrimero(3)
 	lista.InsertarPrimero(4)
 	lista.InsertarPrimero(5)
-	sum := 0
-	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
-		sum += iter.VerActual()
-	}
-	require.Equal(t, 15, sum)
+	contador := 1
 	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
-		if iter2.VerActual() == 3 {
+		if contador == 3 {
 			iter2.Insertar(6)
-			break
+			require.Equal(t, 6, iter2.VerActual())
+			require.Equal(t, 6, lista.Largo())
 		}
+		contador++
 	}
-	sum2 := 0
-	for iter3 := lista.Iterador(); iter3.HaySiguiente(); iter3.Siguiente() {
-		sum2 += iter3.VerActual()
-	}
-	require.Equal(t, 21, sum2)
+
 }
 
+// Caso borde: Insertar al final de la lista
 func TestIteradorExternoInsertarFinal(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
@@ -410,6 +406,7 @@ func TestIteradorExternoInsertarFinal(t *testing.T) {
 
 }
 
+// Caso borde: Insertar al inicio de la lista
 func TestIteradorExternoInsertarInicio(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
@@ -471,26 +468,15 @@ func TestIteradorExternoBorrar(t *testing.T) {
 	lista.InsertarPrimero(2)
 	lista.InsertarPrimero(3)
 
-	sum := 0
+	borrado := 0
 	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
-		sum += iter.VerActual()
-	}
-	require.Equal(t, 6, sum)
-
-	guardar := 0
-	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
-		if iter2.VerActual() == 3 {
-			guardar = iter2.Borrar()
-			break
+		if iter.VerActual() == 3 {
+			borrado = iter.Borrar()
+			require.Equal(t, 2, iter.VerActual())
+			require.Equal(t, 2, lista.Largo())
 		}
 	}
-	require.Equal(t, 3, guardar)
-
-	sum2 := 0
-	for iter3 := lista.Iterador(); iter3.HaySiguiente(); iter3.Siguiente() {
-		sum2 += iter3.VerActual()
-	}
-	require.Equal(t, 3, sum2)
+	require.Equal(t, 3, borrado)
 
 }
 
@@ -498,12 +484,18 @@ func TestIteradorExternoBorrar1(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
 	iter := lista.Iterador()
-	iter.Borrar()
+	for iter.HaySiguiente() {
+		iter.Borrar()
+		require.Panics(t, func() { iter.VerActual() })
+		require.Panics(t, func() { iter.Siguiente() })
+		require.Panics(t, func() { iter.Borrar() })
+	}
 	require.True(t, lista.EstaVacia())
 	iter.Insertar(1)
 	require.Equal(t, 1, lista.VerPrimero())
 }
 
+// Caso borde: borrar al inicio de la lista en la iteracion
 func TestIteradorExternoBorrarInicio(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
@@ -556,7 +548,8 @@ func TestIteradorExternoVaciar(t *testing.T) {
 
 }
 
-func TestIteradorExternoBorrarFinal(t *testing.T) { //Borrar en el ultimo elemento, sin que finalize el iterador
+// Caso borde: borrar el ultimo elemento de la lista en el iterador
+func TestIteradorExternoBorrarFinal(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarUltimo(1)
 	lista.InsertarUltimo(2)
