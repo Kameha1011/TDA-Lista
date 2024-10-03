@@ -1,5 +1,9 @@
 package lista
 
+const (
+	_LARGO_INICIAL = 0
+)
+
 type nodoLista[T any] struct {
 	dato      T
 	siguiente *nodoLista[T]
@@ -28,7 +32,7 @@ func CrearListaEnlazada[T any]() Lista[T] {
 	lista := new(listaEnlazada[T])
 	lista.primero = nil
 	lista.ultimo = nil
-	lista.largo = 0
+	lista.largo = _LARGO_INICIAL
 	return lista
 }
 
@@ -65,7 +69,7 @@ func (lista *listaEnlazada[T]) BorrarPrimero() T {
 	panicListaVacia(lista)
 	dato := lista.primero.dato
 
-	if lista.largo == 2 {
+	if lista.primero.siguiente == lista.ultimo {
 		lista.primero = lista.ultimo
 	} else {
 		lista.primero = lista.primero.siguiente
