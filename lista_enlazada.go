@@ -123,7 +123,7 @@ func crearIteradorListaEnlazada[T any](lista *listaEnlazada[T]) *iteradorListaEn
 }
 
 func panicIteradorFinalizado[T any](iterador *iteradorListaEnlazada[T]) {
-	if iterador.actual == nil {
+	if !iterador.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
 }
