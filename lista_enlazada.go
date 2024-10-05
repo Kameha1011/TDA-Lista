@@ -1,9 +1,5 @@
 package lista
 
-const (
-	_LARGO_INICIAL = 0
-)
-
 type nodoLista[T any] struct {
 	dato      T
 	siguiente *nodoLista[T]
@@ -32,7 +28,7 @@ func CrearListaEnlazada[T any]() Lista[T] {
 	lista := new(listaEnlazada[T])
 	lista.primero = nil
 	lista.ultimo = nil
-	lista.largo = _LARGO_INICIAL
+	lista.largo = 0
 	return lista
 }
 
