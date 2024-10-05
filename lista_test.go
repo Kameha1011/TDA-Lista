@@ -215,6 +215,38 @@ func TestVolumenFloats(t *testing.T) {
 	require.True(t, lista.EstaVacia())
 }
 
+func TestVolumenAunMasGrandeFloats(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[float64]()
+
+	for i := 0; i < _VOLUMEN_GRANDE; i++ {
+		lista.InsertarPrimero(float64(i))
+		require.Equal(t, float64(i), lista.VerPrimero())
+		require.Equal(t, float64(0), lista.VerUltimo())
+		require.Equal(t, i+1, lista.Largo())
+	}
+
+	for i := 0; i < _VOLUMEN_GRANDE; i++ {
+		require.Equal(t, float64(_ULTIMO_INDICE_GRANDE-i), lista.BorrarPrimero())
+		require.Equal(t, _ULTIMO_INDICE_GRANDE-i, lista.Largo())
+	}
+
+	require.True(t, lista.EstaVacia())
+
+	for i := 0; i < _VOLUMEN_GRANDE; i++ {
+		lista.InsertarUltimo(float64(i))
+		require.Equal(t, float64(0), lista.VerPrimero())
+		require.Equal(t, float64(i), lista.VerUltimo())
+		require.Equal(t, i+1, lista.Largo())
+	}
+
+	for i := 0; i < _VOLUMEN_GRANDE; i++ {
+		require.Equal(t, float64(i), lista.BorrarPrimero())
+		require.Equal(t, _ULTIMO_INDICE_GRANDE-i, lista.Largo())
+	}
+
+	require.True(t, lista.EstaVacia())
+}
+
 func TestComportamiento(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	lista.InsertarPrimero(1)
@@ -332,6 +364,21 @@ func TestIterarInternoVolumen(t *testing.T) {
 		return true
 	})
 	require.Equal(t, _VOLUMEN_CHICO, ultimo)
+}
+
+func TestIterarInternoVolumenAunMasGrande(t *testing.T) {
+	lista, ultimo := TDALista.CrearListaEnlazada[int](), 0
+
+	for i := 0; i <= _VOLUMEN_GRANDE; i++ {
+		lista.InsertarUltimo(int(i))
+	}
+
+	lista.Iterar(func(v int) bool {
+		ultimo = v
+		return true
+	})
+
+	require.Equal(t, _VOLUMEN_GRANDE, ultimo)
 }
 
 func TestIterarExterno(t *testing.T) {
@@ -475,7 +522,7 @@ func TestIteradorExternoInsertarInicio(t *testing.T) {
 
 func TestIteradorExternoInsertarVolumen(t *testing.T) {
 	const (
-		_LARGO = 100003
+		_LARGO = _VOLUMEN_CHICO + 3
 	)
 
 	lista := TDALista.CrearListaEnlazada[int]()
@@ -506,6 +553,50 @@ func TestIteradorExternoInsertarVolumen(t *testing.T) {
 	for i := 0; i <= largo; i++ {
 		if i == 3 {
 			for j := 0; j < _VOLUMEN_CHICO; j++ {
+				iter2.Insertar(j)
+			}
+		}
+		iter2.Siguiente()
+	}
+
+	require.Equal(t, _LARGO, lista2.Largo())
+	require.Equal(t, 0, lista2.VerUltimo())
+	require.Equal(t, 3, lista2.VerPrimero())
+}
+
+func TestIteradorExternoInsertarVolumenAunMasGrande(t *testing.T) {
+	const (
+		_LARGO = _VOLUMEN_GRANDE + 3
+	)
+
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(1)
+	lista.InsertarPrimero(2)
+	lista.InsertarPrimero(3)
+
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		if iter.VerActual() == 3 {
+			for i := 0; i < _VOLUMEN_GRANDE; i++ {
+				iter.Insertar(i)
+			}
+			break
+		}
+	}
+
+	require.Equal(t, _LARGO, lista.Largo())
+	require.Equal(t, 1, lista.VerUltimo())
+	require.Equal(t, _ULTIMO_INDICE_GRANDE, lista.VerPrimero())
+
+	lista2 := TDALista.CrearListaEnlazada[int]()
+	lista2.InsertarPrimero(1)
+	lista2.InsertarPrimero(2)
+	lista2.InsertarPrimero(3)
+	iter2 := lista2.Iterador()
+	largo := lista2.Largo()
+
+	for i := 0; i <= largo; i++ {
+		if i == 3 {
+			for j := 0; j < _VOLUMEN_GRANDE; j++ {
 				iter2.Insertar(j)
 			}
 		}
@@ -638,6 +729,26 @@ func TestIteradorExternoBorrarVolumen(t *testing.T) {
 	iter := lista.Iterador()
 
 	for i := 0; i < _VOLUMEN_CHICO; i++ {
+		iter.Insertar(i)
+	}
+
+	for iter.HaySiguiente() {
+		iter.Borrar()
+	}
+
+	require.Equal(t, 0, lista.Largo())
+	require.True(t, lista.EstaVacia())
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { iter.VerActual() })
+	require.PanicsWithValue(t, "El iterador termino de iterar", func() { iter.Siguiente() })
+
+}
+
+func TestIteradorExternoBorrarVolumenAunMasGrande(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+	lista.InsertarPrimero(0)
+	iter := lista.Iterador()
+
+	for i := 0; i < _VOLUMEN_GRANDE; i++ {
 		iter.Insertar(i)
 	}
 
